@@ -29,7 +29,8 @@ def _acquire_single_instance_lock() -> int | None:
     # Windows-only named mutex to prevent multiple bot instances.
     if os.name != "nt":
         return None
-    mutex_name = "Global\\NYCRPP_Federal_Reserve_Bot_MainPy"
+    # Use Local namespace to avoid cross-session/global collisions.
+    mutex_name = "Local\\NYCRPP_Federal_Reserve_Bot_MainPy"
     handle = ctypes.windll.kernel32.CreateMutexW(None, False, mutex_name)
     if not handle:
         return None
